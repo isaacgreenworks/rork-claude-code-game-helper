@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Pressable } from 'react-native';
 import { GameEngine, type GameState } from '@/lib/gameEngine';
 import {
   SkyBackground,
@@ -56,7 +56,7 @@ export default function GameScreen() {
     }
   }, []);
 
-  const onTouchStart = () => {
+  const handleJump = () => {
     if (!engineRef.current) return;
     engineRef.current.player.jump();
   };
@@ -75,11 +75,12 @@ export default function GameScreen() {
   }
 
   return (
-    <View
-      style={styles.container}
-      onTouchStart={onTouchStart}
-    >
-      <View style={styles.gameContainer}>
+    <View style={styles.container}>
+      <Pressable
+        style={styles.gameContainer}
+        onPress={handleJump}
+        onPressIn={handleJump}
+      >
         <SkyBackground cameraOffset={gameState.cameraOffset} />
         
         {gameState.buildings.map((building) => (
@@ -106,7 +107,7 @@ export default function GameScreen() {
         {!gameState.isRunning && (
           <GameOverScreen score={gameState.score} onRestart={handleRestart} />
         )}
-      </View>
+      </Pressable>
     </View>
   );
 }
